@@ -15,6 +15,8 @@ const Issue = ({ publisher }) => {
   );
 };
 
+export default Issue;
+
 // This function gets called at build time
 export async function getServerSideProps(context) {
   const { publisher, title, issue } = context.query;
