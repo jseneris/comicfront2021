@@ -18,28 +18,27 @@ export default function Home({ comics }) {
   }, [filterDate]);
 
   const handleDateChange = (e) => {
-    console.log(e.target.value);
     setFilterDate(e.target.value);
   };
 
   const handleDateEnter = async (e) => {
-    console.log(e);
     if (e.key === 'Enter') {
-      console.log('getting date');
+      setComicList(null);
 
       const res = await fetch(
-        `${keys.comicApi}catalog/issue?date=${filterDate}`
+        `${keys.comicApi}catalog/weekly?date=${filterDate}`
       );
       const comics = await res.json();
       setComicList(comics);
     }
   };
 
-  const updateFilter = (id) => {
-    if (filterList.find((element) => element === id) >= 0) {
-      setFilterList([...filterList, id]);
+  const updateFilter = (value) => {
+    console.log(value);
+    if (filterList.find((element) => element === value)) {
+      setFilterList(filterList.filter((element) => element !== value));
     } else {
-      setFilterList(filterList.filter((element) => element !== id));
+      setFilterList([...filterList, value]);
     }
   };
 
@@ -74,13 +73,33 @@ export default function Home({ comics }) {
         <nav className={styles.filterNav}>
           <div className={styles.filter}>
             {comicList.publishers.map((publisher) => {
-              return <PublisherCard publisher={publisher} />;
+              return (
+                <PublisherCard
+                  publisher={publisher}
+                  enabled={
+                    filterList.length === 0
+                      ? true
+                      : filterList.find(
+                          (element) => element === publisher.seoFriendlyName
+                        )
+                      ? true
+                      : false
+                  }
+                  changeFilter={updateFilter}
+                />
+              );
             })}
           </div>
         </nav>
         <section className={styles.cards}>
           {comicList.issues.map((comic) => {
-            return <ComicCard comic={comic} />;
+            if (
+              filterList.length === 0 ||
+              filterList.find(
+                (e) => e === comic.title.publisher.seoFriendlyName
+              )
+            )
+              return <ComicCard comic={comic} />;
           })}
         </section>
       </main>
@@ -104,7 +123,7 @@ export default function Home({ comics }) {
 export async function getServerSideProps() {
   // Call an external API endpoint to get posts
   const res = await fetch(
-    `${keys.comicApi}catalog/issue?date=${getWednesday()}`
+    `${keys.comicApi}catalog/weekly?date=${getWednesday()}`
   );
   const comics = await res.json();
 

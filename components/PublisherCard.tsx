@@ -5,21 +5,32 @@ import keys from '../config/keys';
 
 interface IPublisherCardProps {
   publisher: IPublisher;
+  enabled: boolean;
+  changeFilter?: (string) => void;
 }
 
-export const PublisherCard = ({ publisher }: IPublisherCardProps) => {
+export const PublisherCard = ({
+  publisher,
+  enabled,
+  changeFilter,
+}: IPublisherCardProps) => {
+  const { name, seoFriendlyName, imageName } = publisher;
+
   return (
-    <div className={styles.card}>
+    <div
+      className={enabled ? styles.card : styles.inactive}
+      onClick={() => changeFilter(seoFriendlyName)}
+    >
       {publisher.imageName && (
-        <div className={styles.image}>
+        <div className={styles.image} key={seoFriendlyName}>
           <img
-            src={`${keys.azureCdnAddress}/publishers/${publisher.imageName}`}
-            alt={publisher.name}
-            title={publisher.name}
+            src={`${keys.azureCdnAddress}/publishers/${imageName}`}
+            alt={name}
+            title={name}
           />
         </div>
       )}
-      <div className={styles.name}>{publisher.name}</div>
+      <div className={styles.name}>{name}</div>
     </div>
   );
 };

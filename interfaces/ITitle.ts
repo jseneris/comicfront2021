@@ -4,4 +4,7 @@ export default interface ITitle {
   name: string;
   seoFriendlyName: string;
   publisher: IPublisher;
+  firstIssue: {
+    imageUrl: string;
+  };
 }

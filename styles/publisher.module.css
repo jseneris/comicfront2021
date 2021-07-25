@@ -17,6 +17,7 @@
 }
 
 .inactive {
+  composes: card;
   background-color: light-grey !important;
   opacity: 0.4;
 }
