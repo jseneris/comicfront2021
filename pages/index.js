@@ -51,7 +51,7 @@ export default function Home({ comics }) {
       </Head>
 
       <main className={styles.main}>
-        <nav className={styles.filter}>
+        <nav className={styles.searchNav}>
           <div className={styles.filter}>
             <div>date</div>
             <div>
@@ -91,16 +91,18 @@ export default function Home({ comics }) {
             })}
           </div>
         </nav>
-        <section className={styles.cards}>
-          {comicList.issues.map((comic) => {
-            if (
-              filterList.length === 0 ||
-              filterList.find(
-                (e) => e === comic.title.publisher.seoFriendlyName
+        <section className={styles.content}>
+          <div className={styles.cards}>
+            {comicList.issues.map((comic) => {
+              if (
+                filterList.length === 0 ||
+                (comic.title.publisher != null &&
+                  filterList.indexOf(comic.title.publisher.seoFriendlyName) >
+                    -1)
               )
-            )
-              return <ComicCard comic={comic} />;
-          })}
+                return <ComicCard comic={comic} />;
+            })}
+          </div>
         </section>
       </main>
       <footer className={styles.footer}>

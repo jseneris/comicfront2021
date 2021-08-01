@@ -24,7 +24,27 @@
   flex-grow: 1;
 }
 
+.content {
+  margin: 1rem 0 1rem 1.25rem;
+}
+
 .cards {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.searchNav {
+  border-bottom: 1px solid black;
+  width: 100%;
+  padding-bottom: 2rem;
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-around;
+}
+
+.filter {
   display: flex;
   flex: 0 0 auto;
   flex-wrap: wrap;
@@ -34,13 +54,7 @@
 .filterNav {
   max-width: 100vw;
   overflow: auto;
-}
-
-.filter {
-  display: flex;
-  flex: 0 0 auto;
-  flex-wrap: wrap;
-  justify-content: space-around;
+  border-bottom: 1px solid black;
 }
 
 @media (max-width: 600px) {

@@ -8,13 +8,14 @@ interface IComicCardProps {
 
 export const ComicCard = ({ comic }: IComicCardProps) => {
   return (
-    <div className={styles.card}>
+    <div
+      className={styles.card}
+      key={`${comic.title.name} - ${comic.seoFriendlyName}`}
+    >
       <div className={styles.image}>
         <img src={comic.imageUrl}></img>
       </div>
-      <div className={styles.title}>
-        {comic.title.name} - {comic.seoFriendlyName}
-      </div>
+      <div className={styles.title}></div>
     </div>
   );
 };
