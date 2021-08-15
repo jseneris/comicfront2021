@@ -3,14 +3,18 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import keys from '../../../../config/keys';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { ComicCard } from '../../../../components/ComicCard';
 
 const IssueShow = ({ currentUser, issue, titleList, ownList }) => {};
 
-const Issue = ({ publisher }) => {
+const Issue = ({ publisher, issues }) => {
+  console.log(issues);
   return (
     <div>
-      <div></div>
+      {issues.map((comic) => {
+        return <ComicCard comic={comic} handleClick={() => {}} />;
+      })}
     </div>
   );
 };
@@ -19,15 +23,17 @@ export default Issue;
 
 // This function gets called at build time
 export async function getServerSideProps(context) {
-  const { publisher, title, issue } = context.query;
+  const { publisher, title } = context.query;
 
-  const res = await fetch(`${keys.comicApi}${publisher}/${title}/${issue}`);
+  const res = await fetch(`${keys.comicApi}catalog/${publisher}/${title}/`);
   const data = await res.json();
+  console.log('fetch', `${keys.comicApi}${publisher}/${title}/`);
   console.log(data);
 
   return {
     props: {
-      publisher: { name: 'marvel' },
+      publisher: { name: title },
+      issues: data,
     },
   };
 }

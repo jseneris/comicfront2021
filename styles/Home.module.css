@@ -57,5 +57,15 @@
   border-bottom: 1px solid black;
 }
 
+.focusImg {
+  height: 80%;
+  margin: auto 3rem;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: row;
+}
+
 @media (max-width: 600px) {
 }

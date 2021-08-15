@@ -4,6 +4,7 @@ import Image from 'next/image';
 import styles from '../styles/Home.module.css';
 import { ComicCard } from '../components/ComicCard';
 import { PublisherCard } from '../components/PublisherCard';
+import { Modal } from '../components/Modal';
 
 import keys from '../config/keys';
 import getWednesday from '../utils/getWednesday';
@@ -11,11 +12,27 @@ import getWednesday from '../utils/getWednesday';
 export default function Home({ comics }) {
   const [filterList, setFilterList] = useState([]);
   const [filterDate, setFilterDate] = useState(getWednesday());
-  const [comicList, setComicList] = useState(comics);
+  const [comicList, setComicList] = useState(comics.issues);
+  const [publisherList, setPublisherList] = useState(comics.publishers);
+  const [showModal, setShowModal] = useState(false);
+  const [currentIssue, setCurrentIssue] = useState(null);
 
   useEffect(() => {
     (async () => {})();
   }, [filterDate]);
+
+  useEffect(() => {
+    const newList = comicList.filter((comic) => {
+      if (
+        filterList.length === 0 ||
+        (comic.title.publisher != null &&
+          filterList.indexOf(comic.title.publisher.seoFriendlyName) > -1)
+      )
+        return comic;
+    });
+
+    setComicList(newList);
+  }, [filterList]);
 
   const handleDateChange = (e) => {
     setFilterDate(e.target.value);
@@ -34,12 +51,24 @@ export default function Home({ comics }) {
   };
 
   const updateFilter = (value) => {
-    console.log(value);
     if (filterList.find((element) => element === value)) {
       setFilterList(filterList.filter((element) => element !== value));
     } else {
       setFilterList([...filterList, value]);
     }
+  };
+
+  const showIssueModal = (title, issue) => {
+    const currentIssue = comicList.find(
+      (x) => x.title.name === title && x.seoFriendlyName === issue
+    );
+    setCurrentIssue(currentIssue);
+    setShowModal(true);
+  };
+
+  const changeCurrentIssue = (offset) => {
+    const newCurrentIssue = comicList.indexOf(currentIssue);
+    setCurrentIssue(comicList[newCurrentIssue + offset]);
   };
 
   return (
@@ -51,6 +80,33 @@ export default function Home({ comics }) {
       </Head>
 
       <main className={styles.main}>
+        <div id="modal-root"></div>
+        <button onClick={() => setShowModal(true)}>Open Modal</button>
+        <Modal onClose={() => setShowModal(false)} show={showModal}>
+          {currentIssue && currentIssue.title && (
+            <div className={styles.modalContent}>
+              <div onClick={() => changeCurrentIssue(-1)}>prev</div>
+              <div>
+                <img
+                  className={styles.focusImg}
+                  src={currentIssue.imageUrl}
+                ></img>
+              </div>
+              <div>
+                <h3>
+                  <a
+                    href={`/catalog/${currentIssue.title.publisher.seoFriendlyName}/${currentIssue.title.seoFriendlyName}/${currentIssue.seoFriendlyName}`}
+                  >
+                    {`${currentIssue.title ? currentIssue.title.name : ''} ${
+                      currentIssue.seoFriendlyName
+                    }`}
+                  </a>
+                </h3>
+              </div>
+              <div onClick={() => changeCurrentIssue(1)}>next</div>
+            </div>
+          )}
+        </Modal>
         <nav className={styles.searchNav}>
           <div className={styles.filter}>
             <div>date</div>
@@ -72,7 +128,7 @@ export default function Home({ comics }) {
         </nav>
         <nav className={styles.filterNav}>
           <div className={styles.filter}>
-            {comicList.publishers.map((publisher) => {
+            {publisherList.map((publisher) => {
               return (
                 <PublisherCard
                   publisher={publisher}
@@ -93,14 +149,8 @@ export default function Home({ comics }) {
         </nav>
         <section className={styles.content}>
           <div className={styles.cards}>
-            {comicList.issues.map((comic) => {
-              if (
-                filterList.length === 0 ||
-                (comic.title.publisher != null &&
-                  filterList.indexOf(comic.title.publisher.seoFriendlyName) >
-                    -1)
-              )
-                return <ComicCard comic={comic} />;
+            {comicList.map((comic) => {
+              return <ComicCard comic={comic} handleClick={showIssueModal} />;
             })}
           </div>
         </section>
