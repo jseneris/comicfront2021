@@ -5,11 +5,13 @@ import styles from '../styles/Home.module.css';
 import { ComicCard } from '../components/ComicCard';
 import { PublisherCard } from '../components/PublisherCard';
 import { Modal } from '../components/Modal';
+import { useUser } from '@auth0/nextjs-auth0';
 
 import keys from '../config/keys';
 import getWednesday from '../utils/getWednesday';
 
 export default function Home({ comics }) {
+  const { user, error, isLoading } = useUser();
   const [filterList, setFilterList] = useState([]);
   const [filterDate, setFilterDate] = useState(getWednesday());
   const [comicList, setComicList] = useState(comics.issues);
@@ -80,8 +82,9 @@ export default function Home({ comics }) {
       </Head>
 
       <main className={styles.main}>
+        {!user && <a href="/api/auth/login">Login</a>}
+        {user && <a href="/api/auth/logout">Logout</a>}
         <div id="modal-root"></div>
-        <button onClick={() => setShowModal(true)}>Open Modal</button>
         <Modal onClose={() => setShowModal(false)} show={showModal}>
           {currentIssue && currentIssue.title && (
             <div className={styles.modalContent}>
