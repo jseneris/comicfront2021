@@ -47,8 +47,7 @@
 .filter {
   display: flex;
   flex: 0 0 auto;
-  flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: space-between;
 }
 
 .filterNav {

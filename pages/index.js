@@ -4,14 +4,13 @@ import Image from 'next/image';
 import styles from '../styles/Home.module.css';
 import { ComicCard } from '../components/ComicCard';
 import { PublisherCard } from '../components/PublisherCard';
+import { HeaderNav } from '../components/HeaderNav';
 import { Modal } from '../components/Modal';
-import { useUser } from '@auth0/nextjs-auth0';
 
 import keys from '../config/keys';
 import getWednesday from '../utils/getWednesday';
 
 export default function Home({ comics }) {
-  const { user, error, isLoading } = useUser();
   const [filterList, setFilterList] = useState([]);
   const [filterDate, setFilterDate] = useState(getWednesday());
   const [comicList, setComicList] = useState(comics.issues);
@@ -81,9 +80,10 @@ export default function Home({ comics }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+      <nav>
+        <HeaderNav />
+      </nav>
       <main className={styles.main}>
-        {!user && <a href="/api/auth/login">Login</a>}
-        {user && <a href="/api/auth/logout">Logout</a>}
         <div id="modal-root"></div>
         <Modal onClose={() => setShowModal(false)} show={showModal}>
           {currentIssue && currentIssue.title && (
@@ -131,9 +131,10 @@ export default function Home({ comics }) {
         </nav>
         <nav className={styles.filterNav}>
           <div className={styles.filter}>
-            {publisherList.map((publisher) => {
+            {publisherList.map((publisher, index) => {
               return (
                 <PublisherCard
+                  index={index}
                   publisher={publisher}
                   enabled={
                     filterList.length === 0
