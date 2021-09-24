@@ -23,7 +23,7 @@ export default function Home({ comics }) {
   }, [filterDate]);
 
   useEffect(() => {
-    const newList = comicList.filter((comic) => {
+    const newList = comics.issues.filter((comic) => {
       if (
         filterList.length === 0 ||
         (comic.title.publisher != null &&
@@ -31,7 +31,6 @@ export default function Home({ comics }) {
       )
         return comic;
     });
-
     setComicList(newList);
   }, [filterList]);
 
