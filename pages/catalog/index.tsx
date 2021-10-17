@@ -6,7 +6,6 @@ import keys from '../../config/keys';
 import { useEffect } from 'react';
 
 const Issue = ({ issues }) => {
-  console.log(issues);
   return (
     <div>
       <div></div>

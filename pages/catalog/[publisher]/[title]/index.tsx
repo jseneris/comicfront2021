@@ -9,7 +9,6 @@ import { ComicCard } from '../../../../components/ComicCard';
 const IssueShow = ({ currentUser, issue, titleList, ownList }) => {};
 
 const Issue = ({ publisher, issues }) => {
-  console.log(issues);
   return (
     <div>
       {issues.map((comic) => {
@@ -27,8 +26,6 @@ export async function getServerSideProps(context) {
 
   const res = await fetch(`${keys.comicApi}catalog/${publisher}/${title}/`);
   const data = await res.json();
-  console.log('fetch', `${keys.comicApi}${publisher}/${title}/`);
-  console.log(data);
 
   return {
     props: {
