@@ -16,7 +16,7 @@ const User = () => {
   const [userInfo, setUserinfo] = useState({} as userInfo);
 
   const getUser = async () => {
-    const res = await fetch('http://localhost:3000/api/user/user');
+    const res = await fetch(`${keys.comicApi}api/user/user`);
     const data = await res.json();
     setUserinfo({
       userName: data.currentUser.userName,
