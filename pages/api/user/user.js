@@ -9,14 +9,11 @@ export default withApiAuthRequired(async function user(req, res) {
   try {
     const { accessToken } = await getAccessToken(req, res);
 
-    const auth0User = await fetch(
-      `https://${keys.AUTH0_ISSUER_BASE_URL}/userinfo`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
+    const auth0User = await fetch(`${keys.AUTH0_ISSUER_BASE_URL}/userinfo`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
 
     const userData = await auth0User.json();
 
