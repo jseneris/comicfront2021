@@ -12,7 +12,7 @@ export const HeaderNav = () => {
       </div>
       <div>{user && <a href="/api/auth/logout">Collection</a>}</div>
       <div>{user && <a href="/user">Account</a>}</div>
-      <div>{user && <a href="/api/auth/logout">Admin</a>}</div>
+      <div>{user && <a href="/admin">Admin</a>}</div>
       <div>
         {!user && <a href="/api/auth/login">Login</a>}
         {user && <a href="/api/auth/logout">Logout</a>}

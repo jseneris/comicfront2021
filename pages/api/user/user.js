@@ -6,7 +6,6 @@ export default withApiAuthRequired(async function user(req, res) {
     const user = await getUser(req, res);
     res.status(200).json(user);
   } catch (error) {
-    console.log('error', error);
     res.status(error.status || 500).json({ error: error.message });
   }
 });
